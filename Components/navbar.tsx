@@ -17,7 +17,9 @@ const Navbar = () => {
             key={item.id}
             className="cursor-pointer hover:dark-bg-slate-800 hover:bg-slate-400 px-3 py-2 rounded-full transition duration-150"
           >
-            <Link href={item.link}>{item.icon} </Link>
+            <Link href={item.link} aria-label={item.title}>
+              {item.icon}
+            </Link>
           </div>
         ))}
         <ToggleTheme />

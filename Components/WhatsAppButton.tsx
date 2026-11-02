@@ -12,7 +12,7 @@ interface WhatsAppButtonProps {
 export function WhatsAppButton({ phone, message }: WhatsAppButtonProps) {
   // Armar la URL de WhatsApp
   const url = `https://wa.me/${phone}?text=${encodeURIComponent(
-    message || "¡Hola! Me gustaría ponerme en contacto contigo."
+    message || "Hi! I would like to get in touch with you.",
   )}`;
 
   return (

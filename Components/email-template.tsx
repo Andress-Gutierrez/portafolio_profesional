@@ -13,9 +13,9 @@ export function EmailTemplate({
 }: EmailTemplateProps) {
   return (
     <div>
-      <h1>Mail enviado de: {firstName}</h1>
-      <h2>Mensaje: {message}</h2>
-      <h3>Correo enviado de: {email}</h3>
+      <h1>New message from: {firstName}</h1>
+      <h2>Message: {message}</h2>
+      <h3>Reply to: {email}</h3>
     </div>
   );
 }
