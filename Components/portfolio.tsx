@@ -14,6 +14,8 @@ const Portfolio = () => {
         return "bg-blue-500";
       case "data-analyst":
         return "bg-purple-500";
+      case "ai":
+        return "bg-cyan-500";
       case "other":
         return "bg-orange-500";
       default:
@@ -22,15 +24,21 @@ const Portfolio = () => {
   };
 
   const getCategoryLabel = (category: string) => {
-    return category === "data-analyst"
-      ? "Data Analyst"
-      : category.charAt(0).toUpperCase() + category.slice(1);
+    if (category === "data-analyst") return "Data Analyst";
+    if (category === "ai") return "AI";
+    return category.charAt(0).toUpperCase() + category.slice(1);
   };
 
   // Un proyecto sin URL real no debe mostrar un enlace roto (#!, vacío o "#").
   const hasRealUrl = (url?: string) =>
     Boolean(url && url.trim() !== "" && url !== "#!" && url !== "#");
-  const filters = ["all", "development", "data-analyst", "other"] as const;
+  const filters = [
+    "all",
+    "development",
+    "data-analyst",
+    "ai",
+    "other",
+  ] as const;
   const [activeFilter, setActiveFilter] =
     useState<(typeof filters)[number]>("all");
 
@@ -51,11 +59,7 @@ const Portfolio = () => {
             variant={activeFilter === f ? "default" : "outline"}
             onClick={() => setActiveFilter(f)}
           >
-            {f === "all"
-              ? "All"
-              : f === "data-analyst"
-                ? "Data Analyst"
-                : f.charAt(0).toUpperCase() + f.slice(1)}
+            {f === "all" ? "All" : getCategoryLabel(f)}
           </Button>
         ))}
       </div>

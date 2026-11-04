@@ -141,6 +141,16 @@ export const dataPortfolio = [
     urlDemo: "",
     category: "other",
   },
+  {
+    id: 7,
+    title: "RAG Document Assistant (LangChain)",
+    image: "/slider-2.jpg",
+    description:
+      "Local RAG pipeline with LangChain, Chroma and Ollama — retrieves document chunks and answers with a local LLM, zero cost",
+    urlGithub: "https://github.com/Andress-Gutierrez/mini_rag_langchain",
+    urlDemo: "",
+    category: "ai",
+  },
 ];
 
 export const dataExperience = [
