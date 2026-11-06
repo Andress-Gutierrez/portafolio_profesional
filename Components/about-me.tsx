@@ -20,7 +20,7 @@ const AboutMe = () => {
 
       <div className="grid md:grid-cols-2 gap-8">
         {/* Columna del carrusel */}
-        <div className="py-12 md:py-0 flex items-center justify-center">
+        <div className="py-12 md:py-0 md:pt-22 flex items-start justify-center">
           <Carousel
             opts={{ align: "start" }}
             orientation="vertical"
@@ -49,15 +49,31 @@ const AboutMe = () => {
         {/* Columna del texto */}
         <div className="flex flex-col ">
           <h4 className="pt-8 my-4 text-xl font-bold text-center">
-            Junior Data Analyst & Web Developer
+            Software Developer & Data Analyst
           </h4>
 
-          <p className="my-1 text-gray-400 text-justify hyphens-auto">
-            I am an Electronic Engineer and Junior Data Analyst passionate about
-            technology, software development, and innovation. I am driven by
-            solving complex challenges with scalable and creative solutions,
-            combining my experience in programming, electronics, and IoT.
-          </p>
+          <div className="my-1 text-gray-400 text-justify hyphens-auto space-y-3">
+            <p>
+              I am an Electronics Engineer with experience developing and
+              automating software solutions using Java, Python and SQL. I have
+              taken part in every stage of the application lifecycle —
+              requirements analysis, development, testing, debugging,
+              maintenance and technical documentation.
+            </p>
+            <p>
+              I work with relational databases such as PostgreSQL, SQL Server
+              and Oracle, and I have built automations and validated processes
+              in production environments. I am familiar with agile methodologies
+              (especially Scrum), collaborative work, version control and DevOps
+              practices.
+            </p>
+            <p>
+              I am a problem-solving, analysis-oriented professional with a
+              strong continuous-learning mindset and experience collaborating
+              with technical and multidisciplinary teams. I am particularly
+              interested in Artificial Intelligence and digital transformation.
+            </p>
+          </div>
 
           {/* Cards */}
           <div className="grid md:grid-cols-2 mt-7 gap-4 ">
@@ -83,7 +99,7 @@ const AboutMe = () => {
             </Link>
             <WhatsAppButton
               phone="573219471460"
-              message="Hola Andrés, vi tu portafolio y quiero más info"
+              message="Hi Andrés, I saw your portfolio and would like more info"
             />
           </div>
         </div>

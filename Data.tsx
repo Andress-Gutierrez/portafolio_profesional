@@ -27,7 +27,7 @@ export const dataAboutMe = [
     id: 2,
     name: "Projects",
     icon: <Wrench />,
-    description: "+20 completed",
+    description: "+20 completed projects",
   },
 ];
 
@@ -36,7 +36,7 @@ export const itemsNavbar = [
     id: 1,
     title: "Home",
     icon: <Home size={20} />,
-    link: "#/",
+    link: "#home",
   },
   {
     id: 2,
@@ -86,166 +86,162 @@ export const dataSlider = [
 export const dataPortfolio = [
   {
     id: 1,
-    title: "Consumo API vehiculos",
+    title: "Vehicle API Consumption",
     image: "/image-1.jpg",
-    description: "API para obtener el precio de un vehiculo",
-    urlGithub: "https://github.com/Andress-Gutierrez/Vehiculo_ultimo_consumo_api",
+    description: "API integration to retrieve vehicle pricing data",
+    urlGithub:
+      "https://github.com/Andress-Gutierrez/Vehiculo_ultimo_consumo_api",
     urlDemo: "https://andress-gutierrez.github.io/Vehiculo_ultimo_consumo_api/",
     category: "development",
   },
   {
     id: 2,
-    title: "Desarrollo Web Ágil",
+    title: "Agile Web Development",
     image: "/image-2.jpg",
-    description: "Metodología ágil aplicada en desarrollo frontend",
-    urlGithub: "#!",
-    urlDemo: "#!",
+    description: "Agile methodology applied to frontend development",
+    urlGithub: "",
+    urlDemo: "",
     category: "development",
   },
   {
     id: 3,
-    title: "Prueba técnica Especialista de Datos",
+    title: "Data Specialist Technical Assessment",
     image: "/image-3.jpg",
     description:
-      "ETL Python, Apache Airflow, PostgreSQL y Power BI — pipeline de datos end-to-end",
+      "Python ETL, Apache Airflow, PostgreSQL and Power BI — end-to-end data pipeline",
     urlGithub:
       "https://github.com/Andress-Gutierrez/prueba_tecnica_especialista_datos",
-    urlDemo: "#!",
+    urlDemo: "",
     category: "data-analyst",
   },
   {
     id: 4,
-    title: "Navegando Ideas Creativas",
+    title: "Navigating Creative Ideas",
     image: "/image-4.jpg",
-    description: "Diseño creativo y desarrollo backend integrado",
-    urlGithub: "#!",
-    urlDemo: "#!",
+    description: "Creative design with integrated backend development",
+    urlGithub: "",
+    urlDemo: "",
     category: "development",
   },
   {
     id: 5,
-    title: "Sitios Web Impactantes",
+    title: "Impactful Websites",
     image: "/image-5.jpg",
-    description: "Visualización de datos con impacto visual",
-    urlGithub: "#!",
-    urlDemo: "#!",
+    description: "Data visualization with visual impact",
+    urlGithub: "",
+    urlDemo: "",
     category: "data-analyst",
   },
   {
     id: 6,
-    title: "Proyectos Web Dinámicos",
+    title: "Dynamic Web Projects",
     image: "/image-6.jpg",
-    description: "Soluciones dinámicas y personalizadas",
-    urlGithub: "#!",
-    urlDemo: "#!",
+    description: "Dynamic, tailor-made solutions",
+    urlGithub: "",
+    urlDemo: "",
     category: "other",
+  },
+  {
+    id: 7,
+    title: "RAG Document Assistant (LangChain)",
+    image: "/slider-2.jpg",
+    description:
+      "Local RAG pipeline with LangChain, Chroma and Ollama — retrieves document chunks and answers with a local LLM, zero cost",
+    urlGithub: "https://github.com/Andress-Gutierrez/mini_rag_langchain",
+    urlDemo: "",
+    category: "ai",
   },
 ];
 
 export const dataExperience = [
   {
     id: 1,
-    title: " Data Analyst 📊📈📉",
+    title: "Backend Development 🔒🖥️🥷",
     experience: [
       {
-        name: "Power BI",
-        subtitle: "Basic",
+        name: "Python (FastAPI)",
+        value: 60,
+      },
+      {
+        name: "Java",
+        value: 60,
+      },
+      {
+        name: "MySQL",
+        value: 60,
+      },
+      {
+        name: "OracleDB",
+        value: 60,
+      },
+      {
+        name: "PostgreSQL",
+        value: 60,
+      },
+      {
+        name: "Docker",
         value: 30,
       },
       {
-        name: "Microsoft Excel",
-        subtitle: "Intermediate",
-        value: 80,
+        name: "Git",
+        value: 60,
       },
       {
-        name: "Tablue",
-        subtitle: "Basic",
+        name: "GitHub",
+        value: 60,
+      },
+      {
+        name: "Next.js",
         value: 20,
       },
       {
-        name: "Python(R)",
-        subtitle: "Basic",
-        value: 20,
-      },
-      {
-        name: "Google Sheets",
-        subtitle: "Intermediate",
-        value: 20,
-      },
-      {
-        name: "BigQuery",
-        subtitle: "Basic",
-        value: 20,
-      },
-      {
-        name: "Looker Studio",
-        subtitle: "Basic",
-        value: 20,
-      },
-      {
-        name: "Microsoft Access",
-        subtitle: "Basic",
-        value: 20,
-      },
-      {
-        name: "LibreOffice Calc",
-        subtitle: "Basic",
-        value: 20,
+        name: "Node.js",
+        value: 50,
       },
     ],
   },
   {
     id: 2,
-    title: "Fronted Development  🎨🖌️🌐",
+    title: "Frontend Development 🎨🖌️🌐",
     experience: [
       {
-        name: "Html5",
-        subtitle: "Intermediate",
-        value: 100,
+        name: "HTML5",
+        value: 70,
       },
       {
         name: "Tailwind CSS",
-        subtitle: "Basic",
         value: 30,
       },
       {
         name: "Bootstrap",
-        subtitle: "Basic",
         value: 30,
       },
       {
         name: "CSS3",
-        subtitle: "Intermediate",
         value: 60,
       },
       {
         name: "React",
-        subtitle: "Intermediate",
         value: 50,
       },
       {
-        name: "Next.js",
-        subtitle: "Basic",
-        value: 20,
+        name: "Angular",
+        value: 30,
       },
       {
         name: "TypeScript",
-        subtitle: "Basic",
         value: 20,
       },
       {
         name: "C#",
-        subtitle: "Basic",
         value: 30,
       },
       {
-        name: ".Net(Blazor)",
-        subtitle: "Basic",
+        name: ".NET (Blazor)",
         value: 30,
       },
       {
         name: "PHP",
-        subtitle: "Basic",
         value: 20,
       },
     ],
@@ -253,121 +249,148 @@ export const dataExperience = [
 
   {
     id: 3,
-    title: "Backend Development  🔒🖥️🥷",
+    title: "Data Analyst 📊📈📉",
     experience: [
       {
-        name: "Python(FastAPI)",
-        subtitle: "Intermediate",
-        value: 60,
-      },
-      {
-        name: "MySQL",
-        subtitle: "Intermediate",
-        value: 60,
-      },
-      {
-        name: "PostgreSQL",
-        subtitle: "Intermediate",
-        value: 60,
-      },
-      {
-        name: "Docker",
-        subtitle: "Basic",
+        name: "Power BI",
         value: 30,
       },
       {
-        name: "Git",
-        subtitle: "Intermediate",
-        value: 60,
+        name: "Microsoft Excel",
+        value: 65,
       },
       {
-        name: "GitHub",
-        subtitle: "Intermediate",
-        value: 60,
+        name: "Tableau",
+        value: 20,
+      },
+      {
+        name: "Python(R)",
+        value: 20,
+      },
+      {
+        name: "Google Sheets",
+        value: 50,
+      },
+      {
+        name: "BigQuery",
+        value: 20,
+      },
+      {
+        name: "Looker Studio",
+        value: 20,
+      },
+      {
+        name: "Microsoft Access",
+        value: 20,
+      },
+      {
+        name: "LibreOffice Calc",
+        value: 20,
       },
     ],
   },
 
   {
     id: 4,
-    title: "Electronic Engineer 🔌⚡🧠",
+    title: "Cloud & DevOps 🌐💻🧠",
     experience: [
       {
-        name: "C++",
-        subtitle: "Intermediate",
-        value: 70,
+        name: "Microsoft Azure",
+        value: 50,
       },
       {
-        name: "Assembler",
-        subtitle: "Intermediate",
-        value: 60,
+        name: "Google Cloud (GCP)",
+        value: 50,
       },
       {
-        name: "MATLAB",
-        subtitle: "Basic",
-        value: 20,
+        name: "Azure DevOps",
+        value: 50,
       },
       {
-        name: "Arduino",
-        subtitle: "Proficient",
-        value: 100,
+        name: "AWS",
+        value: 50,
       },
       {
-        name: "Proteus",
-        subtitle: "Proficient",
-        value: 100,
+        name: "Argo CD",
+        value: 50,
       },
       {
-        name: "CircuitMaker",
-        subtitle: "Intermediate",
-        value: 60,
+        name: "Rancher",
+        value: 50,
       },
       {
-        name: "STM32",
-        subtitle: "Basic",
-        value: 20,
+        name: "Terraform",
+        value: 50,
       },
       {
-        name: "Altium",
-        subtitle: "Basic",
-        value: 20,
+        name: "Kubernetes",
+        value: 40,
       },
     ],
   },
 
   {
     id: 5,
-    title: "Others  🔒🖥️🥷",
+    title: "Automation & AI 🤖⚙️🧠",
     experience: [
       {
-        name: "AutoCAD",
-        subtitle: "Basic",
-        value: 20,
+        name: "Apache Airflow",
+        value: 60,
       },
       {
-        name: "Power Platform",
-        subtitle: "Basic",
-        value: 20,
+        name: "Selenium",
+        value: 50,
       },
       {
-        name: "linux",
-        subtitle: "Basic",
-        value: 20,
+        name: "Python Automation",
+        value: 60,
       },
       {
-        name: "COBOL",
-        subtitle: "Basic",
+        name: "LangChain",
         value: 30,
       },
       {
-        name: "Windows server",
-        subtitle: "Basic",
-        value: 30,
+        name: "Power Automate",
+        value: 20,
+      },
+    ],
+  },
+
+  {
+    id: 6,
+    title: "Electronics & Embedded Systems ⚡🔌🧠",
+    experience: [
+      {
+        name: "C++",
+        value: 70,
       },
       {
-        name: "Visual studio",
-        subtitle: "Basic",
-        value: 30,
+        name: "Assembly",
+        value: 60,
+      },
+      {
+        name: "MATLAB",
+        value: 20,
+      },
+      {
+        name: "Arduino",
+        value: 100,
+      },
+      {
+        name: "Proteus",
+        value: 100,
+      },
+      {
+        name: "CircuitMaker",
+        value: 60,
+      },
+      {
+        name: "STM32",
+        value: 20,
+      },
+      {
+        name: "Altium Designer",
+        value: 20,
       },
     ],
   },
@@ -500,14 +523,14 @@ export const dataContact = [
   {
     id: 2,
     title: "Github",
-    subtitle: "github.com/ratasi",
-    link: "github.com/ratasi",
+    subtitle: "github.com/Andress-Gutierrez",
+    link: "https://github.com/Andress-Gutierrez",
     icon: <Code2 />,
   },
   {
     id: 3,
     title: "Email",
-    subtitle: "email@email.com",
+    subtitle: "andydrummer9221@gmail.com",
     link: "mailto:andydrummer9221@gmail.com",
     icon: <Inbox />,
   },

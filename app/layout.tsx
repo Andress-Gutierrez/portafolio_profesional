@@ -19,8 +19,8 @@ const urbanist = Urbanist({
 });
 
 export const metadata: Metadata = {
-  title: "Portafolio Web",
-  description: "Portafolio by Andrés Peña Gutierrez",
+  title: "Andrés Peña Gutiérrez — Software Developer & Data Analyst",
+  description: "Portafolio by Andrés Peña Gutiérrez",
 };
 
 export default function RootLayout({

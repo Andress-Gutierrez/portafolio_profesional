@@ -14,6 +14,8 @@ const Portfolio = () => {
         return "bg-blue-500";
       case "data-analyst":
         return "bg-purple-500";
+      case "ai":
+        return "bg-cyan-500";
       case "other":
         return "bg-orange-500";
       default:
@@ -22,11 +24,21 @@ const Portfolio = () => {
   };
 
   const getCategoryLabel = (category: string) => {
-    return category === "data-analyst"
-      ? "Data Analyst"
-      : category.charAt(0).toUpperCase() + category.slice(1);
+    if (category === "data-analyst") return "Data Analyst";
+    if (category === "ai") return "AI";
+    return category.charAt(0).toUpperCase() + category.slice(1);
   };
-  const filters = ["all", "development", "data-analyst", "other"] as const;
+
+  // Un proyecto sin URL real no debe mostrar un enlace roto (#!, vacío o "#").
+  const hasRealUrl = (url?: string) =>
+    Boolean(url && url.trim() !== "" && url !== "#!" && url !== "#");
+  const filters = [
+    "all",
+    "development",
+    "data-analyst",
+    "ai",
+    "other",
+  ] as const;
   const [activeFilter, setActiveFilter] =
     useState<(typeof filters)[number]>("all");
 
@@ -47,11 +59,7 @@ const Portfolio = () => {
             variant={activeFilter === f ? "default" : "outline"}
             onClick={() => setActiveFilter(f)}
           >
-            {f === "all"
-              ? "All"
-              : f === "data-analyst"
-                ? "Data Analyst"
-                : f.charAt(0).toUpperCase() + f.slice(1)}
+            {f === "all" ? "All" : getCategoryLabel(f)}
           </Button>
         ))}
       </div>
@@ -96,21 +104,43 @@ const Portfolio = () => {
                 {data.description}
               </p>
               <div className="mt-auto flex gap-3">
-                <Link
-                  className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium border bg-background shadow-xs dark:bg-input/30 dark:border-input`}
-                  href={data.urlGithub}
-                  target="_blank"
-                >
-                  Github
-                </Link>
+                {hasRealUrl(data.urlGithub) ? (
+                  <Link
+                    className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium border bg-background shadow-xs dark:bg-input/30 dark:border-input`}
+                    href={data.urlGithub}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Github
+                  </Link>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    title="Coming soon"
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium border bg-background shadow-xs dark:bg-input/30 dark:border-input opacity-40 cursor-not-allowed"
+                  >
+                    Github
+                  </span>
+                )}
 
-                <Link
-                  className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow-xs`}
-                  href={data.urlDemo}
-                  target="_blank"
-                >
-                  Live demo
-                </Link>
+                {hasRealUrl(data.urlDemo) ? (
+                  <Link
+                    className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground shadow-xs`}
+                    href={data.urlDemo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Live demo
+                  </Link>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    title="Coming soon"
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground shadow-xs opacity-40 cursor-not-allowed"
+                  >
+                    Live demo
+                  </span>
+                )}
               </div>
             </div>
           </div>

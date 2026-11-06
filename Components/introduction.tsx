@@ -22,10 +22,9 @@ const Introduction = () => {
     const typed = new Typed(typedEl.current, {
       strings: [
         "📊 Junior Data Analyst ",
-        "🤖 Automation & IA ",
-        "☁️ Junior Cloud Engineer ",
-        "💻 Junior Developer ",
-        "⚡ Electronic Engineer ",
+        "🤖 Automation & AI ",
+        "☁️ Cloud",
+        "💻 Junior Software Developer",
       ],
       typeSpeed: 45,
       backSpeed: 25,
@@ -45,9 +44,7 @@ const Introduction = () => {
       <div className="text-center" id="home">
         <h3 className="text-xl">Hello I&apos;m</h3>
 
-        <h1 className="text-4xl font-bold mb-3">
-          Andrés Peña Gutierrez 👨🏻‍💻
-        </h1>
+        <h1 className="text-4xl font-bold mb-3">Andrés Peña Gutierrez 👨🏻‍💻</h1>
 
         {/* Texto animado con Typed.js */}
         <h2 className="text-2xl text-gray-400 min-h-[36px]">
@@ -99,12 +96,7 @@ const Introduction = () => {
           </DropdownMenu>
         </div>
 
-        <Image
-          src="/profile.png"
-          alt="profile pic"
-          width={640}
-          height={400}
-        />
+        <Image src="/profile.png" alt="profile pic" width={640} height={400} />
       </div>
     </Container>
   );
