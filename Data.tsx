@@ -144,7 +144,7 @@ export const dataPortfolio = [
   {
     id: 7,
     title: "RAG Document Assistant (LangChain)",
-    image: "/slider-2.jpg",
+    image: "/project-rag.jpg",
     description:
       "Local RAG pipeline with LangChain, Chroma and Ollama — retrieves document chunks and answers with a local LLM, zero cost",
     urlGithub: "https://github.com/Andress-Gutierrez/mini_rag_langchain",
