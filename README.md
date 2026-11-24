@@ -4,18 +4,18 @@ Portafolio web personal desarrollado con **Next.js**, **React**, **TypeScript** 
 
 El proyecto esta pensado para publicarse en **Vercel** y mantener despliegues automaticos desde GitHub.
 
+Incluye ademas una capa de **telemetria anonima** de vistas y sesiones (Supabase + Edge Function) y un **panel privado de metricas** en `/dashboard`, protegido con Supabase Auth.
+
 ## Estado del proyecto
 
-Proyecto en desarrollo activo.
+Proyecto en desarrollo activo. La landing esta publicada en produccion; la telemetria y el panel privado de metricas se desarrollan en la rama `feature/telemetria` (Fase 1.5).
 
-Pendientes principales antes de compartir publicamente:
+Pendientes principales antes de cerrar la Fase 1:
 
-- Completar proyectos reales en la seccion de portafolio.
-- Reemplazar enlaces temporales `#!` por URLs reales o desactivar botones sin destino.
-- Revisar consistencia de idioma entre espanol e ingles.
-- Verificar remitente/dominio de Resend para produccion.
+- Foto de perfil definitiva (`public/profile.png`).
+- Confirmar que no exista un proyecto duplicado en Vercel (`portafolio-profesional` sin el sufijo `-e3ii`).
 - Probar responsive en movil y desktop.
-- Ejecutar build de produccion antes del deploy final.
+- Verificar remitente/dominio de Resend para uso publico.
 
 ## Caracteristicas
 
@@ -30,6 +30,9 @@ Pendientes principales antes de compartir publicamente:
 - API route `POST /api/send` para envio de correos con Resend.
 - Archivos de CV disponibles desde `public/cv`.
 - Componentes reutilizables estilo shadcn/ui con Radix UI y Tailwind.
+- Telemetria anonima de vistas y sesiones en la portada (solo en el dominio oficial).
+- Panel privado de metricas en `/dashboard` con Supabase Auth.
+- Acceso al panel desde la barra de navegacion (icono de grafico).
 
 ## Stack tecnologico
 
@@ -44,6 +47,9 @@ Pendientes principales antes de compartir publicamente:
 | Email | Resend, @react-email/render |
 | Temas | next-themes |
 | Carrusel | embla-carousel-react |
+| Backend | Supabase (PostgreSQL, Auth, Edge Functions) |
+| Sesion en App Router | @supabase/ssr, @supabase/supabase-js |
+| Telemetria | Tracker propio + Edge Function `track-visit` |
 | Package manager | pnpm |
 
 ## Estructura del proyecto
@@ -54,12 +60,23 @@ portafolio_profesional/
 │   ├── api/
 │   │   └── send/
 │   │       └── route.ts       # Endpoint del formulario de contacto
+│   ├── auth/
+│   │   └── signout/
+│   │       └── route.ts       # Cierre de sesion (POST)
+│   ├── dashboard/
+│   │   └── page.tsx           # Panel privado de metricas (protegido en servidor)
 │   ├── globals.css            # Estilos globales
 │   ├── layout.tsx             # Layout raiz, fuentes y ThemeProvider
-│   └── page.tsx               # Composicion principal de la landing
+│   ├── login/
+│   │   └── page.tsx           # Login con Supabase Auth
+│   └── page.tsx               # Composicion principal de la landing (monta el tracker)
 ├── Components/
 │   ├── ui/                    # Componentes base de interfaz
 │   ├── shared/                # Componentes compartidos
+│   ├── analytics/
+│   │   └── tracker.tsx        # Registro anonimo de vistas (Client Component)
+│   ├── auth/
+│   │   └── login-form.tsx     # Formulario de correo y contrasena
 │   ├── about-me.tsx
 │   ├── contact.tsx
 │   ├── contact-form.tsx
@@ -74,13 +91,21 @@ portafolio_profesional/
 │   ├── toggle-theme.tsx
 │   └── WhatsAppButton.tsx
 ├── lib/
+│   ├── supabase/
+│   │   ├── client.ts          # Cliente navegador y lectura de variables
+│   │   ├── middleware.ts      # Refresco de sesion
+│   │   └── server.ts          # Cliente servidor con cookies
+│   ├── telemetry/
+│   │   └── types.ts           # Tipos de get_portfolio_metrics
 │   └── utils.ts               # Utilidades compartidas
 ├── public/
 │   ├── cv/                    # CVs descargables
 │   └── images...              # Imagenes del sitio
+├── .env.example               # Plantilla de variables de entorno (versionada)
 ├── Data.tsx                   # Datos de navbar, experiencia, servicios y proyectos
 ├── components.json            # Configuracion de componentes UI
 ├── next.config.ts             # Configuracion de Next.js
+├── middleware.ts              # Refresco de sesion solo en /login y /dashboard
 ├── package.json
 ├── pnpm-lock.yaml
 ├── postcss.config.mjs
@@ -124,18 +149,29 @@ Crear un archivo `.env` en la raiz del proyecto con las variables necesarias.
 
 ## Variables de entorno
 
-El formulario de contacto usa Resend. Para que funcione se requiere:
+El repositorio versiona solo `.env.example` (plantilla sin valores). Copiarlo a `.env` y completar:
 
 ```env
-RESEND_API_KEY=tu_api_key_de_resend
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_SITE_HOST=
+RESEND_API_KEY=
 ```
+
+| Variable | Uso | Publica | Entornos en Vercel |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto Supabase | Si | Production + Preview |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clave publicable (`sb_publishable_...`) | Si | Production + Preview |
+| `NEXT_PUBLIC_SITE_HOST` | Dominio oficial que acepta el tracker (sin `https://` ni barra final) | Si | Production (en Preview, opcional con el mismo valor) |
+| `RESEND_API_KEY` | Envio de correo del formulario de contacto | No (secreta) | Production + Preview |
 
 Notas importantes:
 
-- No subir `.env` a GitHub.
-- `.env*` ya esta incluido en `.gitignore`.
-- En produccion, configurar `RESEND_API_KEY` directamente en Vercel.
-- Para uso publico conviene verificar dominio/remitente en Resend.
+- Las `NEXT_PUBLIC_*` se incrustan en el build: cambiar una exige **redeploy** en Vercel.
+- Todo lo que lleve prefijo `NEXT_PUBLIC_` es visible para el visitante; nunca usar ese prefijo con `RESEND_API_KEY`.
+- No subir `.env` a GitHub: `.env*` esta en `.gitignore` con excepcion para `.env.example`.
+- Nunca usar la `service_role` key de Supabase en este proyecto; las claves privadas viven solo en Supabase.
+- Si se conecta un dominio propio, actualizar `NEXT_PUBLIC_SITE_HOST` y redeployar.
 
 ## Scripts disponibles
 
@@ -214,13 +250,16 @@ Pasos:
 3. Seleccionar **Add New Project**.
 4. Importar el repositorio desde GitHub.
 5. Confirmar que Vercel detecte **Next.js**.
-6. Configurar variable de entorno:
+6. Configurar las variables de entorno (ver seccion "Variables de entorno") en **Production** y, si se quieren probar login y dashboard en previews, tambien en **Preview**.
 
 ```env
-RESEND_API_KEY=tu_api_key_de_resend
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_SITE_HOST=
+RESEND_API_KEY=
 ```
 
-7. Ejecutar deploy.
+7. Ejecutar deploy. Despues de cambiar una `NEXT_PUBLIC_*`, redeployar sin cache de build.
 8. Probar el link generado por Vercel.
 9. Configurar dominio propio cuando el sitio este listo.
 
@@ -269,6 +308,16 @@ Actualmente el endpoint usa Resend para enviar la informacion del formulario por
 - Validacion del lado servidor.
 - Mensaje visual de exito/error para el usuario.
 
+## Telemetria y panel privado
+
+- `/` monta `Components/analytics/tracker.tsx`, un Client Component que registra una vista solo cuando el hostname coincide con `NEXT_PUBLIC_SITE_HOST`; desarrollo, previews y dominios no oficiales quedan fuera.
+- Cada vista se envia a la Edge Function `track-visit` de Supabase con `fetch` fire-and-forget (`keepalive`): si falla, el portafolio sigue funcionando.
+- La sesion es un UUID v4 en `sessionStorage`, reutilizado si pasan menos de 30 minutos desde el ultimo evento. La deduplicacion por remontaje dura lo que dura el documento, asi que recargar cuenta como vista nueva.
+- El backend limita la ingesta a 60 vistas por minuto global.
+- `/login` y `/dashboard` son privados: Supabase Auth con registro publico desactivado, autorizacion por UUID del administrador dentro de la RPC `get_portfolio_metrics` y verificacion de sesion **en el servidor** de Next.
+- El icono de grafico de la barra de navegacion abre `/dashboard`.
+- Las metricas se calculan en la zona horaria `America/Bogota`.
+
 ## Contenido editable
 
 La mayor parte del contenido visible del portafolio esta centralizado en:
@@ -296,6 +345,9 @@ Alli se pueden editar:
 - [ ] Links de GitHub y demos son reales.
 - [ ] CVs estan actualizados.
 - [ ] Formulario envia correos correctamente.
+- [ ] Telemetria registrando en produccion: una vista por apertura o recarga, sin sumar al cambiar de ancla.
+- [ ] `/dashboard` sin sesion redirige a `/login`.
+- [ ] Variables de Supabase cargadas en Vercel (Production y Preview) y redeploy hecho.
 - [ ] Sitio probado en movil.
 - [ ] Metadata revisada: titulo, descripcion, idioma.
 - [ ] Dominio/remitente de Resend verificado para produccion.
