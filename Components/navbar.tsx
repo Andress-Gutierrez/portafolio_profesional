@@ -1,5 +1,6 @@
 import { itemsNavbar } from "@/Data";
 import Link from "next/link";
+import { ChartColumn } from "lucide-react";
 import { ToggleTheme } from "./toggle-theme";
 
 const Navbar = () => {
@@ -22,6 +23,19 @@ const Navbar = () => {
             </Link>
           </div>
         ))}
+        <span
+          aria-hidden="true"
+          className="mx-1 h-6 w-px bg-slate-500/40"
+        />
+        <div className="cursor-pointer hover:dark-bg-slate-800 hover:bg-slate-400 px-3 py-2 rounded-full transition duration-150">
+          <Link
+            href="/dashboard"
+            aria-label="Private metrics dashboard"
+            title="Private metrics dashboard"
+          >
+            <ChartColumn size={20} />
+          </Link>
+        </div>
         <ToggleTheme />
       </div>
     </nav>
