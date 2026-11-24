@@ -3,18 +3,22 @@
 import { useEffect } from "react";
 
 const CLAVE_SESION = "pf_telemetry_session";
-const CLAVE_ULTIMO_ENVIO = "pf_telemetry_last_sent";
 const TREINTA_MINUTOS = 30 * 60 * 1000;
 const VENTANA_DEDUPE = 1500;
 const DOMINIO_POR_DEFECTO = "portafolio-profesional-e3ii.vercel.app";
 
+// Vive solo mientras el documento está abierto: un remontaje de React no
+// duplica la vista, pero una recarga sí cuenta como vista nueva.
+let ultimoEnvio = 0;
+
 /**
  * Registra una vista cuando se abre o recarga `/` en el dominio oficial.
  *
- * Reglas (ver MVP-telemetria.md / DEC-014):
+ * Reglas (ver CONTEXTO.md → "Telemetría del portafolio" / DEC-014):
  * - Solo cuenta aperturas y recargas: los cambios de ancla no generan vistas.
  * - La sesión se identifica con un UUID v4 guardado en sessionStorage.
  * - Se reutiliza el UUID si han pasado menos de 30 minutos desde el último evento.
+ * - La deduplicación por remontaje dura lo que dura el documento: recargar cuenta.
  * - La ingesta es fire-and-forget: si falla, el portafolio sigue funcionando.
  */
 export function TelemetryTracker() {
@@ -61,12 +65,9 @@ export function TelemetryTracker() {
       );
 
       // 2. Evitar la doble vista por remontaje (StrictMode / re-render)
-      const ultimoEnvio = Number(
-        sessionStorage.getItem(CLAVE_ULTIMO_ENVIO) ?? 0,
-      );
       if (ahora - ultimoEnvio < VENTANA_DEDUPE) return;
 
-      sessionStorage.setItem(CLAVE_ULTIMO_ENVIO, String(ahora));
+      ultimoEnvio = ahora;
 
       // 3. Enviar el evento sin bloquear ni romper la página
       void fetch(`${url}/functions/v1/track-visit`, {
