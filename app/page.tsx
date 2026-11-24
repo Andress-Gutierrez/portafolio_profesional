@@ -7,9 +7,12 @@ import Portfolio from "@/Components/portfolio";
 import Contact from "@/Components/contact";
 import Footer from "@/Components/footer";
 
+import { TelemetryTracker } from "@/Components/analytics/tracker";
+
 export default function Home() {
   return (
     <main className="pb-40">
+      <TelemetryTracker />
       <Navbar />
       <Introduction />
       <AboutMe />
