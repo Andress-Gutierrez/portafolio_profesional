@@ -103,7 +103,7 @@ const Introduction = () => {
           height={1024}
           priority
           sizes="(max-width: 768px) 100vw, 320px"
-          className="mx-auto h-auto w-full max-w-xs"
+          className="mx-auto mt-12 h-auto w-full max-w-xs"
         />
       </div>
     </Container>
