@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
+import { Reveal } from "./shared/reveal";
 
 const Portfolio = () => {
   const getCategoryColor = (category: string) => {
@@ -71,13 +72,11 @@ const Portfolio = () => {
 
       {/* Grid de proyectos */}
       <div className="grid md:grid-cols-3 gap-8 mt-12 items-stretch ">
-        {filteredProjects.map((data) => (
-          <div
-            key={data.id}
-            className="relative rounded-2xl overflow-hidden shadow-sm transition-all duration-300 transform hover:scale-105 animate-fade-in h-full flex flex-col"
-          >
-            {/* Badge de categoría */}
-            <div className="absolute top-4 right-4 z-10 animate-fade-in transition-all duration-300 transform hover:scale-105 animate-fade-in">
+        {filteredProjects.map((data, index) => (
+          <Reveal key={data.id} className="h-full" delay={index * 60}>
+            <div className="relative rounded-2xl overflow-hidden shadow-sm transition-all duration-300 transform hover:scale-105 h-full flex flex-col">
+              {/* Badge de categoría */}
+              <div className="absolute top-4 right-4 z-10 transition-all duration-300 transform hover:scale-105">
               <span
                 className={`${getCategoryColor(data.category)} text-white px-3 py-1 rounded-full text-xs font-semibold uppercase `}
               >
@@ -85,7 +84,7 @@ const Portfolio = () => {
               </span>
             </div>
             {/* Imagen */}
-            <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 animate-fade-in transition-all duration-300 transform hover:scale-105 animate-fade-in">
+            <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
               <Image
                 src={data.image}
                 alt={data.title}
@@ -143,7 +142,8 @@ const Portfolio = () => {
                 )}
               </div>
             </div>
-          </div>
+            </div>
+          </Reveal>
         ))}
       </div>
 

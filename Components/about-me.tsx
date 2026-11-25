@@ -2,6 +2,7 @@ import { dataAboutMe, dataSlider } from "@/Data";
 import Link from "next/link";
 import { WhatsAppButton } from "@/Components/WhatsAppButton";
 import Title from "./shared/title";
+import { Reveal } from "./shared/reveal";
 import { Button } from "./ui/button";
 import { Phone } from "lucide-react";
 import {
@@ -77,15 +78,14 @@ const AboutMe = () => {
 
           {/* Cards */}
           <div className="grid md:grid-cols-2 mt-7 gap-4 ">
-            {dataAboutMe.map((data) => (
-              <div
-                key={data.id}
-                className="rounded-xl border-slate-400 border-2 p-6 dark:bg-slate-800 h-full flex flex-col transition-all duration-300 transform hover:scale-105 animate-fade-in"
-              >
-                {data.icon}
-                <p className="my-2">{data.name}</p>
-                <p className="text-gray-400">{data.description}</p>
-              </div>
+            {dataAboutMe.map((data, index) => (
+              <Reveal key={data.id} className="h-full" delay={index * 80}>
+                <div className="rounded-xl border-slate-400 border-2 p-6 dark:bg-slate-800 h-full flex flex-col transition-all duration-300 transform hover:scale-105">
+                  {data.icon}
+                  <p className="my-2">{data.name}</p>
+                  <p className="text-gray-400">{data.description}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
 
