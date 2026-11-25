@@ -15,7 +15,7 @@ import Image from "next/image";
 
 const AboutMe = () => {
   return (
-    <div className="p-6 md:px-12 md:py-30 max-w-5xl mx-auto" id="about-me">
+    <div className="p-6 md:px-12 md:py-24 max-w-5xl mx-auto" id="about-me">
       <Title title="About me" subtitle="Get to know me" />
 
       <div className="grid md:grid-cols-2 gap-8">
@@ -26,16 +26,16 @@ const AboutMe = () => {
             orientation="vertical"
             className="w-full max-w-md h-fit"
           >
-            <CarouselContent className="-mt-1 h-[350px]">
+            <CarouselContent className="-mt-1 h-[300px] md:h-[380px]">
               {dataSlider.map((data) => (
                 <CarouselItem key={data.id}>
-                  <div className="flex items-center justify-center">
+                  <div className="flex h-full items-center justify-center">
                     <Image
                       src={data.url}
-                      alt="Image"
+                      alt="Certificado y trabajo destacado"
                       width={300}
                       height={450}
-                      className="w-full h-auto rounded-lg"
+                      className="h-full w-full rounded-lg object-cover"
                     />
                   </div>
                 </CarouselItem>

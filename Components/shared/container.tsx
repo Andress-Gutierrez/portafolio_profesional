@@ -6,7 +6,7 @@ const Container = (props: ContainerProps) => {
   const { children } = props;
 
   return (
-    <div className="px-12 py-20 md:px-30 md:py-32 max-w-3xl mx-auto">
+    <div className="px-6 py-16 md:px-12 md:py-24 max-w-3xl mx-auto">
       {children}
     </div>
   );
