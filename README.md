@@ -8,14 +8,21 @@ Incluye ademas una capa de **telemetria anonima** de vistas y sesiones (Supabase
 
 ## Estado del proyecto
 
-Proyecto en desarrollo activo. La landing esta publicada en produccion; la telemetria y el panel privado de metricas se desarrollan en la rama `feature/telemetria` (Fase 1.5).
+Sitio en produccion en `https://portafolio-profesional-e3ii.vercel.app`.
 
-Pendientes principales antes de cerrar la Fase 1:
+| Area | Estado |
+| --- | --- |
+| Landing publica (perfil, experiencia, skills, proyectos, contacto, CV) | En produccion |
+| Formulario de contacto (Resend) | Funcional; pendiente verificar remitente/dominio para uso publico |
+| Telemetria anonima + panel privado de metricas | En produccion desde 2026-11-24 |
+| Responsive en dispositivos reales | Pendiente de revision final |
+| Foto de perfil definitiva | Definida: `public/profile.webp` (1024x1024, WebP) |
 
-- Foto de perfil definitiva (`public/profile.png`).
-- Confirmar que no exista un proyecto duplicado en Vercel (`portafolio-profesional` sin el sufijo `-e3ii`).
+Pendientes antes de compartir el enlace publicamente:
+
 - Probar responsive en movil y desktop.
 - Verificar remitente/dominio de Resend para uso publico.
+- Revisar metadata final (titulo, descripcion, idioma).
 
 ## Caracteristicas
 
@@ -33,6 +40,18 @@ Pendientes principales antes de cerrar la Fase 1:
 - Telemetria anonima de vistas y sesiones en la portada (solo en el dominio oficial).
 - Panel privado de metricas en `/dashboard` con Supabase Auth.
 - Acceso al panel desde la barra de navegacion (icono de grafico).
+
+## Rutas de la aplicacion
+
+| Ruta | Tipo | Acceso | Descripcion |
+| --- | --- | --- | --- |
+| `/` | Landing (Server Component) | Publica | Portada completa por anclas y montaje del tracker de telemetria |
+| `/login` | Pagina dinamica | Publica (registro desactivado) | Formulario de correo y contrasena para el panel |
+| `/auth/signout` | Route Handler `POST` | Requiere sesion | Cierra la sesion de Supabase Auth |
+| `/dashboard` | Pagina dinamica | **Privada** (verificada en servidor) | Metricas: hoy, acumulado y ultimos 7 dias |
+| `/api/send` | Route Handler `POST` | Publica | Envio del formulario de contacto via Resend |
+
+El middleware solo se ejecuta en `/login` y `/dashboard`; la portada publica no paga ese coste.
 
 ## Stack tecnologico
 
@@ -100,7 +119,9 @@ portafolio_profesional/
 │   └── utils.ts               # Utilidades compartidas
 ├── public/
 │   ├── cv/                    # CVs descargables
-│   └── images...              # Imagenes del sitio
+│   └── images...              # Imagenes del sitio (incluye profile.webp)
+├── types/
+│   └── globals.d.ts           # Tipos globales (import de CSS)
 ├── .env.example               # Plantilla de variables de entorno (versionada)
 ├── Data.tsx                   # Datos de navbar, experiencia, servicios y proyectos
 ├── components.json            # Configuracion de componentes UI
@@ -199,6 +220,15 @@ pnpm lint
 
 Ejecuta ESLint para detectar problemas de calidad de codigo.
 
+## Testing
+
+No hay suite de pruebas automatizada. La validacion de cada cambio es:
+
+1. `pnpm lint` sin errores ni warnings.
+2. `pnpm build` correcto (7 rutas).
+3. Revision manual del deploy preview de Vercel.
+4. Para cambios de telemetria o autenticacion, verificar el checklist de la seccion "Telemetria y panel privado".
+
 ## Flujo recomendado de trabajo
 
 1. Hacer cambios en una rama local.
@@ -272,9 +302,9 @@ Configuracion esperada:
 | Build Command | `pnpm build` |
 | Output Directory | Automatico |
 
-## Deploy de prueba vs deploy final
+## Deploy de prueba vs produccion
 
-Se recomienda hacer primero un deploy de prueba, aunque el contenido todavia no este perfecto. Ese deploy ayuda a validar:
+El sitio ya esta desplegado en produccion. Esta seccion queda como referencia para futuros cambios: antes de publicar, un deploy de preview permite validar:
 
 - Build en entorno limpio.
 - Variables de entorno.
@@ -284,7 +314,7 @@ Se recomienda hacer primero un deploy de prueba, aunque el contenido todavia no 
 - Rutas internas.
 - Visualizacion en dispositivos moviles.
 
-Despues del deploy de prueba se puede hacer la limpieza final de contenido y publicar el enlace definitivo.
+El deploy a produccion se hace al mergear a `main`; los previews no afectan al dominio oficial.
 
 ## Contacto y formulario
 
@@ -310,13 +340,59 @@ Actualmente el endpoint usa Resend para enviar la informacion del formulario por
 
 ## Telemetria y panel privado
 
-- `/` monta `Components/analytics/tracker.tsx`, un Client Component que registra una vista solo cuando el hostname coincide con `NEXT_PUBLIC_SITE_HOST`; desarrollo, previews y dominios no oficiales quedan fuera.
-- Cada vista se envia a la Edge Function `track-visit` de Supabase con `fetch` fire-and-forget (`keepalive`): si falla, el portafolio sigue funcionando.
-- La sesion es un UUID v4 en `sessionStorage`, reutilizado si pasan menos de 30 minutos desde el ultimo evento. La deduplicacion por remontaje dura lo que dura el documento, asi que recargar cuenta como vista nueva.
-- El backend limita la ingesta a 60 vistas por minuto global.
-- `/login` y `/dashboard` son privados: Supabase Auth con registro publico desactivado, autorizacion por UUID del administrador dentro de la RPC `get_portfolio_metrics` y verificacion de sesion **en el servidor** de Next.
-- El icono de grafico de la barra de navegacion abre `/dashboard`.
-- Las metricas se calculan en la zona horaria `America/Bogota`.
+**Que se mide**
+
+- Una **vista** = una apertura o recarga de `/` en el dominio oficial. Cambiar de ancla, hacer scroll o clic en cualquier elemento **no** genera eventos.
+- Una **sesion** = un UUID v4 anonimo guardado en `sessionStorage`, reutilizado si pasan menos de 30 minutos de inactividad en esa pestana. Pestana nueva, navegador nuevo o perfil nuevo = sesion nueva.
+- El dashboard muestra **vistas** (filas) y **sesiones** (`session_id` distintos) de hoy, del acumulado y de los ultimos 7 dias, en zona horaria `America/Bogota`.
+
+**Como funciona**
+
+- `/` monta `Components/analytics/tracker.tsx` (Client Component). El tracker solo envia datos si `window.location.hostname === NEXT_PUBLIC_SITE_HOST`; desarrollo, previews y URLs de deployment quedan fuera.
+- El envio es `fetch` fire-and-forget con `keepalive`: si falla, el portafolio sigue funcionando.
+- La deduplicacion por remontaje de React dura lo que dura el documento, asi que recargar **si** cuenta como vista nueva.
+- El backend limita la ingesta a 60 vistas por minuto global y responde `429` al superar el cupo.
+- Por ser una peticion cross-origin con `Content-Type: application/json`, el navegador envia un **preflight `OPTIONS`** (respuesta `204`) antes del `POST` real (`201`). En DevTools se ven dos filas por vista; el `OPTIONS` no escribe datos.
+
+**Datos almacenados** (tabla `portfolio_events`)
+
+| Campo | Contenido |
+| --- | --- |
+| `id` | Lo asigna PostgreSQL |
+| `event_type` | `page_view` |
+| `page_path` | Siempre `/` |
+| `session_id` | UUID v4 anonimo |
+| `created_at` | Fecha y hora del servidor |
+
+No se guardan nombres, correos, IPs ni parametros de URL.
+
+**Seguridad del panel**
+
+- Supabase Auth con correo y contrasena; registro publico desactivado.
+- La RPC `get_portfolio_metrics` valida el UUID del administrador y devuelve `401` sin sesion valida.
+- `/dashboard` verifica la sesion **en el servidor** antes de renderizar.
+- El icono de grafico de la barra de navegacion abre `/dashboard`; el enlace es visible, pero sin sesion redirige a `/login`.
+
+**Limitaciones conocidas**
+
+- Solo cuenta el **alias de produccion** (`portafolio-profesional-e3ii.vercel.app`). La URL inmutable del deployment (con hash) y los previews no registran vistas.
+- El panel **no se auto-refresca**: hay que recargar la pagina para ver los ultimos numeros.
+- No se miden clics en GitHub, demos o CV, ni profundidad por seccion.
+
+**Como verificar en produccion**
+
+1. Abrir `https://portafolio-profesional-e3ii.vercel.app/` (alias, no la URL del deployment).
+2. DevTools -> Network -> filtrar `track-visit`: debe aparecer `OPTIONS 204` y `POST 201`.
+3. DevTools -> Application -> Session Storage: debe existir `pf_telemetry_session`.
+4. Abrir `/dashboard` con la cuenta administradora: la vista debe reflejarse al recargar.
+
+## Accesibilidad y rendimiento
+
+- Imagenes servidas con `next/image`: optimizacion y lazy loading automaticos.
+- Tema claro/oscuro con `next-themes`, sin parpadeo al cargar.
+- Los enlaces de la barra de navegacion tienen `aria-label` y el boton de tema tiene nombre accesible.
+- Las animaciones decorativas usan keyframes de Tailwind (`animate-fade-in`).
+- Pendiente para el futuro: respetar `prefers-reduced-motion` cuando se agreguen animaciones nuevas.
 
 ## Contenido editable
 
@@ -346,8 +422,10 @@ Alli se pueden editar:
 - [ ] CVs estan actualizados.
 - [ ] Formulario envia correos correctamente.
 - [ ] Telemetria registrando en produccion: una vista por apertura o recarga, sin sumar al cambiar de ancla.
+- [ ] Telemetria verificada desde el **alias de produccion** (las URLs de deployment con hash y los previews no cuentan).
 - [ ] `/dashboard` sin sesion redirige a `/login`.
 - [ ] Variables de Supabase cargadas en Vercel (Production y Preview) y redeploy hecho.
+- [x] Foto de perfil definitiva (`public/profile.webp`, 1024x1024).
 - [ ] Sitio probado en movil.
 - [ ] Metadata revisada: titulo, descripcion, idioma.
 - [ ] Dominio/remitente de Resend verificado para produccion.

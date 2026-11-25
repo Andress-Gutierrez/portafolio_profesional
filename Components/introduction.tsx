@@ -96,7 +96,15 @@ const Introduction = () => {
           </DropdownMenu>
         </div>
 
-        <Image src="/profile.png" alt="profile pic" width={640} height={400} />
+        <Image
+          src="/profile.webp"
+          alt="Andrés Peña Gutiérrez, Software Developer & Data Analyst"
+          width={1024}
+          height={1024}
+          priority
+          sizes="(max-width: 768px) 100vw, 320px"
+          className="mx-auto mt-12 h-auto w-full max-w-xs"
+        />
       </div>
     </Container>
   );
