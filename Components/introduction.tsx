@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import Image from "next/image";
 import Container from "./shared/container";
+import SpinningCoin from "./shared/SpinningCoin";
 import Typed from "typed.js";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -96,15 +96,10 @@ const Introduction = () => {
           </DropdownMenu>
         </div>
 
-        <Image
-          src="/profile.webp"
-          alt="Andrés Peña Gutiérrez, Software Developer & Data Analyst"
-          width={1024}
-          height={1024}
-          priority
-          sizes="(max-width: 768px) 100vw, 320px"
-          className="mx-auto mt-12 h-auto w-full max-w-xs"
-        />
+        {/* El aire para el salto lo reserva el propio componente (`.headroom`) */}
+        <div className="mt-6">
+          <SpinningCoin src="/profile.webp" size={340} />
+        </div>
       </div>
     </Container>
   );
