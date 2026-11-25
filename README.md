@@ -16,11 +16,10 @@ Sitio en produccion en `https://portafolio-profesional-e3ii.vercel.app`.
 | Formulario de contacto (Resend) | Funcional; pendiente verificar remitente/dominio para uso publico |
 | Telemetria anonima + panel privado de metricas | En produccion desde 2026-11-24 |
 | Responsive en dispositivos reales | Pendiente de revision final |
-| Foto de perfil definitiva | Pendiente |
+| Foto de perfil definitiva | Definida: `public/profile.webp` (1024x1024, WebP) |
 
 Pendientes antes de compartir el enlace publicamente:
 
-- Foto de perfil definitiva (`public/profile.png`).
 - Probar responsive en movil y desktop.
 - Verificar remitente/dominio de Resend para uso publico.
 - Revisar metadata final (titulo, descripcion, idioma).
@@ -120,7 +119,7 @@ portafolio_profesional/
 │   └── utils.ts               # Utilidades compartidas
 ├── public/
 │   ├── cv/                    # CVs descargables
-│   └── images...              # Imagenes del sitio (incluye profile.png)
+│   └── images...              # Imagenes del sitio (incluye profile.webp)
 ├── types/
 │   └── globals.d.ts           # Tipos globales (import de CSS)
 ├── .env.example               # Plantilla de variables de entorno (versionada)
@@ -426,7 +425,7 @@ Alli se pueden editar:
 - [ ] Telemetria verificada desde el **alias de produccion** (las URLs de deployment con hash y los previews no cuentan).
 - [ ] `/dashboard` sin sesion redirige a `/login`.
 - [ ] Variables de Supabase cargadas en Vercel (Production y Preview) y redeploy hecho.
-- [ ] Foto de perfil definitiva (`public/profile.png`).
+- [x] Foto de perfil definitiva (`public/profile.webp`, 1024x1024).
 - [ ] Sitio probado en movil.
 - [ ] Metadata revisada: titulo, descripcion, idioma.
 - [ ] Dominio/remitente de Resend verificado para produccion.
